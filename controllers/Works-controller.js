@@ -11,21 +11,36 @@ class WorksController {
 
 			const WorksArray = await Promise.all(works.map(async (work) => {
 
-                const workImages = await Images.findAll({where: {workId: work.id}})
-                const workPriceFactor = await Pricefactor.findAll({where: {workId: work.id}})
+                const workImages = await Images.findAll({attributes:["id","url"], where: {workId: work.id}})
+                const workPriceFactor = await Pricefactor.findAll({attributes: ["id", "name"], where: {workId: work.id}})
 				const workNeedDesc = await Need.findOne({where: {workId: work.id, parentCategoryId: null}})
-				const workNeedList = await Need.findAll({where: {workId: work.id, parentCategoryId: workNeedDesc.id}})
-
-                return{
-                    ...work.dataValues,
-                    images: workImages,
-					priceFactor: workPriceFactor,
-					need:{
-						title: workNeedDesc.name,
-						description: workNeedDesc.description,
-						list: workNeedList
+				if( workNeedDesc){
+					const workNeedList = await Need.findAll( {attributes:["id", "name", "description"], where: {workId: work.id, parentCategoryId: workNeedDesc.id}})
+					return{
+						...work.dataValues,
+						images: workImages,
+	
+						priceFactor: {
+							workId: work.id,
+							list: workPriceFactor
+						},
+						need:{
+							title: workNeedDesc.name,
+							description: workNeedDesc.description,
+							workId: work.id,
+							list: workNeedList
+						}
 					}
-                }
+				} else return{
+					...work.dataValues,
+                    images: workImages,
+                    priceFactor: {
+                        workId: work.id,
+                        list: workPriceFactor
+                    }
+				}
+
+                
             }));
 	
 			return res.json({message: WorksArray})
