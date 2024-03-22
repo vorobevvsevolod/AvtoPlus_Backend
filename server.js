@@ -32,7 +32,7 @@ app.use(errorHandler)
 const start = async () => {
 	try {
 		await sequelize.authenticate()
-		await sequelize.sync()
+		await sequelize.sync({force:true})
 		app.listen(PORT, () => console.log(`Сервер запущен на ${PORT} порту`))
 	}catch (e) { console.log(e.message); }
 }
