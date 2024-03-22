@@ -6,6 +6,10 @@ const Need = require("./Need-model");
 
 const Images = require("./Images-model");
 
+//Галерея работ
+const ImagesGalleryWorks = require("./ImageGalleryWorks-model");
+const GalleryWorks = require("./GalleryWorks-model");
+
 //WORKS
 
 //Одна категория может иметь много разных работа)
@@ -25,6 +29,13 @@ Need.hasMany(Need, { as: 'Children', foreignKey: 'parentCategoryId' });
 Need.belongsTo(Need, { as: 'Parent', foreignKey: 'parentCategoryId' });
 
 
+//Галерея работ
+GalleryWorks.hasMany(ImagesGalleryWorks);
+ImagesGalleryWorks.belongsTo(GalleryWorks);
+
+Works.hasMany(GalleryWorks);
+GalleryWorks.belongsTo(Works);
+
 //MATERIALS
 
 
@@ -34,5 +45,7 @@ module.exports ={
 	Need,
 	Works,
 	Pricefactor,
-	Images
+	Images,
+	GalleryWorks,
+	ImagesGalleryWorks
 }

@@ -16,9 +16,11 @@ app.use(cors())
 app.use(express.json())
 
 // //Фотографии
-// // redux.use(express.static(path.resolve(__dirname, 'static/product')))
-// // redux.use(express.static(path.resolve(__dirname, 'static/dopProduct')))
+
+
 app.use(express.static(path.resolve(__dirname, 'static/categoryIMG')))
+app.use(express.static(path.resolve(__dirname, 'static/WorksIMG')))
+app.use(express.static(path.resolve(__dirname, 'static/GalleryWorks')))
 
 app.use('/admin', adminRouter)
 
