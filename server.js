@@ -19,8 +19,8 @@ app.use(express.json())
 
 
 app.use(express.static(path.resolve(__dirname, 'static/categoryIMG')))
-app.use(express.static(path.resolve(__dirname, 'static/WorksIMG')))
 app.use(express.static(path.resolve(__dirname, 'static/GalleryWorks')))
+app.use(express.static(path.resolve(__dirname, 'static/WorksIMG')))
 
 app.use('/admin', adminRouter)
 
@@ -40,7 +40,3 @@ const start = async () => {
 }
 
 start();
-
-
-
-
