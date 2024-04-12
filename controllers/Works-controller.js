@@ -39,8 +39,6 @@ class WorksController {
                         list: workPriceFactor
                     }
 				}
-
-                
             }));
 	
 			return res.json({message: WorksArray})
