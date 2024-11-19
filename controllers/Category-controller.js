@@ -7,16 +7,17 @@ class CategoryController {
 
     async get(req, res, next) {
         try {
-            const categoriesMain = await Category.findAll({attributes: ["id", "name", "img", "typeOfServiceId"]});
+            const categoriesMain = await Category.findAll({attributes: ["id", "name", "img", "url", "typeOfServiceId"]});
     
             const categoriesArray = await Promise.all(categoriesMain.map(async (categoryMain) => {
     
                 if (categoryMain.typeOfServiceId === 1) {
-                    const works = await Works.findAll({attributes: ["id", "title"], where: {categoryId: String(categoryMain.id)}})
+                    const works = await Works.findAll({attributes: ["id", "title", "url"], where: {categoryId: String(categoryMain.id)}})
                     const categorySubNew = works.map(catsub => {
                         return {
                             idSub: catsub.id,
-                            title: catsub.title
+                            title: catsub.title,
+                            url: catsub.url
                         }
                     })
     
@@ -24,22 +25,25 @@ class CategoryController {
                         id: categoryMain.id,
                         name: categoryMain.name,
                         img: categoryMain.img,
+                        url: categoryMain.url,
                         typeOfServiceId: categoryMain.typeOfServiceId,
                         sub: categorySubNew
                     }
     
                 } else if (categoryMain.typeOfServiceId === 2) {
-                    const materials = await Materials.findAll({attributes: ["id", "title"], where: {categoryId: String(categoryMain.id)}})
+                    const materials = await Materials.findAll({attributes: ["id", "title", "url"], where: {categoryId: String(categoryMain.id)}})
                     const categorySubNew = materials.map(catsub => {
                         return {
                             idSub: catsub.id,
-                            title: catsub.title
+                            title: catsub.title,
+                            url: catsub.url
                         }
                     })
                     return {
                         id: categoryMain.id,
                         name: categoryMain.name,
                         img: categoryMain.img,
+                        url: categoryMain.url,
                         typeOfServiceId: categoryMain.typeOfServiceId,
                         sub: categorySubNew
                     }

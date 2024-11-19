@@ -4,4 +4,6 @@ const MaterialsController = require('../controllers/Materials-controller');
 
 router.get('/', MaterialsController.get)
 
+router.get('/:id', MaterialsController.getById)
+
 module.exports = router

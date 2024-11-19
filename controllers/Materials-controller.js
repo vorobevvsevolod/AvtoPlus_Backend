@@ -86,6 +86,79 @@ class MaterialsController {
 			return next(ApiError.internal(e.message));
 		}
 	}
+
+	async getById(req, res, next) {
+		try {
+			const { id } = req.params;
+	
+			// Получаем основной материал по id
+			const material = await Materials.findOne({ where: { id, parentMaterialId: null } });
+			if (!material) {
+				return res.status(404).json({ message: 'Material not found' });
+			}
+	
+			// Получаем подматериалы для основного материала
+			const subMaterials = await Materials.findAll({ where: { parentMaterialId: material.id } });
+	
+			// Собираем данные о подматериалах, включая изображения, ценовые факторы и потребности
+			const subMaterialObjects = await Promise.all(subMaterials.map(async (subMaterial) => {
+				const images = await Images.findAll({ attributes: ["id", "url"], where: { materialId: subMaterial.id } });
+				const priceFactors = await Pricefactor.findAll({ attributes: ["id", "name"], where: { materialId: subMaterial.id } });
+				const needDesc = await Need.findOne({ where: { materialId: subMaterial.id, parentCategoryId: null } });
+	
+				const needList = needDesc ? await Need.findAll({
+					attributes: ["id", "name", "description"],
+					where: { materialId: subMaterial.id, parentCategoryId: needDesc.id }
+				}) : [];
+	
+				return {
+					...subMaterial.dataValues,
+					images,
+					priceFactor: {
+						materialId: subMaterial.id,
+						list: priceFactors
+					},
+					need: needDesc ? {
+						title: needDesc.name,
+						description: needDesc.description,
+						materialId: subMaterial.id,
+						list: needList
+					} : null
+				};
+			}));
+	
+			// Получаем изображения, ценовые факторы и потребности для основного материала
+			const materialImages = await Images.findAll({ attributes: ["id", "url"], where: { materialId: material.id } });
+			const materialPriceFactors = await Pricefactor.findAll({ attributes: ["id", "name"], where: { materialId: material.id } });
+			const materialNeedDesc = await Need.findOne({ where: { materialId: material.id, parentCategoryId: null } });
+	
+			const materialNeedList = materialNeedDesc ? await Need.findAll({
+				attributes: ["id", "name", "description"],
+				where: { materialId: material.id, parentCategoryId: materialNeedDesc.id }
+			}) : [];
+	
+			const result = {
+				...material.dataValues,
+				images: materialImages,
+				priceFactor: {
+					materialId: material.id,
+					list: materialPriceFactors
+				},
+				need: materialNeedDesc ? {
+					title: materialNeedDesc.name,
+					description: materialNeedDesc.description,
+					materialId: material.id,
+					list: materialNeedList
+				} : null,
+				sub: subMaterialObjects
+			};
+	
+			return res.json(result);
+		} catch (e) {
+			return next(ApiError.internal(e.message));
+		}
+	}
+	
 	
 	
 }

@@ -15,7 +15,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
-// //Фотографии
+ //Фотографии
 
 
 app.use(express.static(path.resolve(__dirname, 'static/categoryIMG')))
@@ -29,6 +29,10 @@ app.use(fileUpload({}))
 app.use('/api', routers)
 app.use(errorHandler)
 
+app.get('/*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
+  
 
 
 const start = async () => {

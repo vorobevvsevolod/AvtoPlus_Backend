@@ -6,6 +6,7 @@ const Materials = sequalize.define('materials', {
 	title: {type: DataTypes.TEXT},
 	descriptionTitle: {type: DataTypes.TEXT},
 	description: {type: DataTypes.TEXT},
+	url: {type: DataTypes.STRING},
 
 	lastYear: {type: DataTypes.TEXT},
 

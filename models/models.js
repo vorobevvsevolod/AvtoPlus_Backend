@@ -17,10 +17,6 @@ const ImagesGalleryWorks = require("./ImageGalleryWorks-model");
 const GalleryWorks = require("./GalleryWorks-model");
 
 
-
-
-//Одна категория может иметь много разных работа)
-
 TypesOfServices.hasMany(Category);
 Category.belongsTo(TypesOfServices);
 
