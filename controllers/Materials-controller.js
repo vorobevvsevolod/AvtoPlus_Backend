@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 const ApiError = require('../error/ApiError')
-const {Images, Pricefactor, Need, Materials, Deliverylocation } = require('../models/models');
+const {Images, Pricefactor, Need, Materials, Deliverylocation, MaterialProperties } = require('../models/models');
 
 
 class MaterialsController {
@@ -24,6 +24,10 @@ class MaterialsController {
 					return await Need.findOne({ where: { materialId: subMaterial.id, parentCategoryId: null } });
 				}));
 
+				const subMaterialProperties = await Promise.all(subMaterials.map(async (subMaterial) => {
+					return await MaterialProperties.findOne({ where: { materialId: subMaterial.id} });
+				}));
+
 				
 	
 	
@@ -38,6 +42,10 @@ class MaterialsController {
 							materialId: subMaterial.id,
 							list: subMaterialPriceFactors[index]
 						},
+						materialProperties: {
+							materialId: subMaterial.id,
+							list: subMaterialProperties[index]
+						},
 						need: materialNeedDesc ? {
 							title: materialNeedDesc.name,
 							description: materialNeedDesc.description,
@@ -49,6 +57,7 @@ class MaterialsController {
 	
 				const materialImages = await Images.findAll({ attributes: ["id", "url"], where: { materialId: material.id } });
 				const materialPriceFactor = await Pricefactor.findAll({ attributes: ["id", "name"], where: { materialId: material.id } });
+				const materialProperties = await MaterialProperties.findAll({ attributes: ["id", "name"], where: { materialId: material.id } });
 				const materialNeedDesc = await Need.findOne({ where: { materialId: material.id, parentCategoryId: null } });
 	
 				if (materialNeedDesc) {
@@ -59,6 +68,10 @@ class MaterialsController {
 						priceFactor: {
 							materialId: material.id,
 							list: materialPriceFactor
+						},
+						materialProperties: {
+							materialId: material.id,
+							list: materialProperties
 						},
 						need: {
 							title: materialNeedDesc.name,
@@ -75,6 +88,10 @@ class MaterialsController {
 						priceFactor: {
 							materialId: material.id,
 							list: materialPriceFactor
+						},
+						materialProperties: {
+							materialId: material.id,
+							list: materialProperties
 						},
 						sub: subMaterialObjects
 					};

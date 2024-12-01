@@ -2,6 +2,7 @@ const Users = require('./Users-model');
 const Category = require("./Category-model");
 const Works = require("./Works-model");
 const Pricefactor = require("./PriceFactor-model");
+const MaterialProperties = require("./MaterialProperties-model")
 const Need = require("./Need-model");
 const TypesOfServices = require("./TypesOfServices-model");
 
@@ -53,6 +54,9 @@ Materials.belongsTo(Category);
 Materials.hasMany(Pricefactor);
 Pricefactor.belongsTo(Materials);
 
+Materials.hasMany(MaterialProperties);
+MaterialProperties.belongsTo(Materials);
+
 Materials.hasMany(Images);
 Images.belongsTo(Materials);
 
@@ -85,5 +89,6 @@ module.exports ={
 	Materials,
 	Deliverylocation,
     MaterialFromLocation,
+	MaterialProperties
 
 }

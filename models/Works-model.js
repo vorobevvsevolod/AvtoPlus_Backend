@@ -11,7 +11,10 @@ const Works = sequalize.define('works', {
 	slogan: {type: DataTypes.TEXT},
 	price: {type: DataTypes.TEXT},
 	priceDescription: {type: DataTypes.TEXT},
-	url: {type: DataTypes.STRING}
+	url: {type: DataTypes.STRING},
+	seoTitle: {type: DataTypes.TEXT},
+	seoDescription: {type: DataTypes.TEXT},
+	
 })
 
 module.exports = Works;

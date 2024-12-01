@@ -13,6 +13,8 @@ const Materials = sequalize.define('materials', {
 	features: {type: DataTypes.TEXT},
 
 	slogan: {type: DataTypes.TEXT},
+	seoTitle: {type: DataTypes.TEXT},
+	seoDescription: {type: DataTypes.TEXT},
 	
 	priceDescription: {type: DataTypes.TEXT},
 
