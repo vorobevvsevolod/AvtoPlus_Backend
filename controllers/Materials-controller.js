@@ -25,16 +25,15 @@ class MaterialsController {
 				}));
 
 				const subMaterialProperties = await Promise.all(subMaterials.map(async (subMaterial) => {
-					return await MaterialProperties.findOne({ where: { materialId: subMaterial.id} });
+					return await MaterialProperties.findAll({ attributes: ["id", "name"], where: { materialId: subMaterial.id } });
 				}));
 
-				
-	
-	
+
+
 				const subMaterialObjects = await Promise.all(subMaterials.map(async (subMaterial, index) => {
 					const materialNeedDesc = subMaterialNeedDescs[index];
 					const materialNeedList = materialNeedDesc ? await Need.findAll({ attributes: ["id", "name", "description"], where: { materialId: subMaterial.id, parentCategoryId: materialNeedDesc.id } }) : [];
-	
+
 					return {
 						...subMaterial.dataValues,
 						images: subMaterialImages[index],
