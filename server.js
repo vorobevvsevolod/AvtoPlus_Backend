@@ -12,8 +12,14 @@ const errorHandler = require('./middleware/errorHandlerMiddleware')
 const adminRouter = require("./AdminBro");
 
 const app = express();
-app.use(cors())
-app.use(express.json())
+const corsOptions = {
+	origin: 'http://188.68.223.158',
+	methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+	allowedHeaders: ['Content-Type', 'Authorization'], 
+  };
+  
+  app.use(cors(corsOptions));
+  app.use(express.json());
 
  //Фотографии
 
